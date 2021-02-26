@@ -1,23 +1,41 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+const moment = require('moment');
+const cryptoJS = require('crypto-js');
+
+const PUBLIC_API_KEY = process.env.REACT_APP_API_PUBLIC_KEY;
+const PRIVATE_API_KEY = process.env.REACT_APP_API_PRIVATE_KEY;
+
 
 function App() {
+
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timeStamp = moment().format("MM/DD/YYYY");
+    const hash = cryptoJS.MD5(timeStamp + PRIVATE_API_KEY + PUBLIC_API_KEY).toString();
+    fetch(
+      `http://gateway.marvel.com/v1/public/comics?apikey=${PUBLIC_API_KEY}&hash=${hash}&ts=${timeStamp}`,
+      {
+        method: "GET",
+      }
+    )
+      .then(res => res.json())
+      .then(response => {
+        setData(response.data.results);
+        setLoading(false);
+      })
+      .catch(error => console.log(error));
+  }, [])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Marvel React App</h1>
+      {loading ? <h2>Content is loading</h2> : (
+        data.map((element, index) => <h2 key={element.id}>{element.title}</h2>)
+      )}
     </div>
   );
 }
