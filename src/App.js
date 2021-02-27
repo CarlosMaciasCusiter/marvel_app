@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Card from './components/Card/Card'
 import './App.css';
 const moment = require('moment');
 const cryptoJS = require('crypto-js');
@@ -34,7 +35,8 @@ function App() {
     <div className="App">
       <h1>Marvel React App</h1>
       {loading ? <h2>Content is loading</h2> : (
-        data.map((element, index) => <h2 key={element.id}>{element.title}</h2>)
+        data.map(element => 
+        <Card key={element.id} title={element.title} description={element.description}/>)
       )}
     </div>
   );
