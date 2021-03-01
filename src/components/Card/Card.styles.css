@@ -1,0 +1,15 @@
+.card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-gap: 1rem;
+    border: red 1px solid;
+    margin: auto;
+    grid-auto-flow: dense;
+    align-items: flex-start;
+}
+
+img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
